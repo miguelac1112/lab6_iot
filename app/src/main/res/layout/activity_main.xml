@@ -30,7 +30,7 @@
         android:layout_marginStart="119dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/circle"
-        app:layout_constraintBottom_toTopOf="@+id/btnTutor"
+        app:layout_constraintBottom_toTopOf="@+id/btnPuzzle"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,14 +44,14 @@
         android:layout_marginEnd="120dp"
         android:background="@drawable/circle"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnTrabajador"
+        app:layout_constraintBottom_toTopOf="@+id/btnMemory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/memory" />
 
     <Button
-        android:id="@+id/btnTutor"
+        android:id="@+id/btnPuzzle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="161dp"
@@ -67,7 +67,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnTrabajador"
+        android:id="@+id/btnMemory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="147dp"
