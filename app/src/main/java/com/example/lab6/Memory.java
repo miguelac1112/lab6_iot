@@ -2,12 +2,18 @@ package com.example.lab6;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.annotation.Nullable;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -29,15 +35,36 @@ public class Memory extends AppCompatActivity {
     Bitmap bmp;
     int val;
     boolean b=true;
+    Button buttonAgregarImg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory);
 
+        buttonAgregarImg = findViewById(R.id.buttonAgregarImg);
+
+        buttonAgregarImg.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, 1);
+            }
+        });
+
         iniciar();
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null){
+
+            Uri selectedImageUri = data.getData();
+        }
+    }
 
 
     public void iniciar() {

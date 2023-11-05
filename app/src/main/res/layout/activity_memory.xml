@@ -136,4 +136,11 @@
         </LinearLayout>
     </ScrollView>
 
+    <Button
+        android:id="@+id/buttonAgregarImg"
+        android:layout_width="216dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Agregar Imagenes"/>
+
 </LinearLayout>
