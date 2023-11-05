@@ -46,11 +46,16 @@ public class Puzzle extends AppCompatActivity {
         generateNumbers();
         loadDataToViews();
 
-        /*CargarImagen.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            intent.setType("image/*");
-            startActivityForResult(intent, 1);
-        });*/
+        CargarImagen = findViewById(R.id.CargarImagen);
+
+        CargarImagen.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
     @Override
@@ -60,7 +65,6 @@ public class Puzzle extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null){
 
             Uri selectedImageUri = data.getData();
-
         }
     }
 
