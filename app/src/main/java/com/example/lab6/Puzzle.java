@@ -1,9 +1,15 @@
 package com.example.lab6;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -26,6 +32,10 @@ public class Puzzle extends AppCompatActivity {
     private TextView textViewTime;
     private Timer timer;
     private int timeCount=0;
+    private Button CargarImagen;
+    private Button Mezclar;
+    private boolean isTimeRunning;
+    private static final int SELECT_PICTURE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +45,23 @@ public class Puzzle extends AppCompatActivity {
         loadNumbers();
         generateNumbers();
         loadDataToViews();
+
+        /*CargarImagen.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            startActivityForResult(intent, 1);
+        });*/
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null){
+
+            Uri selectedImageUri = data.getData();
+
+        }
     }
 
     private void loadDataToViews(){
@@ -105,6 +132,7 @@ public class Puzzle extends AppCompatActivity {
         group=findViewById(R.id.group);
         textViewSteps=findViewById(R.id.text_view_steps);
         textViewTime=findViewById(R.id.text_view_time);
+        Mezclar = findViewById(R.id.Mezclar);
 
         loadTimer();
         buttons = new Button[4][4];
@@ -112,6 +140,14 @@ public class Puzzle extends AppCompatActivity {
         for (int i=0;i<group.getChildCount();i++){
             buttons[i/4][i%4] = (Button) group.getChildAt(i);
         }
+
+        Mezclar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generateNumbers();
+                loadDataToViews();
+            }
+        });
     }
 
     public void buttonClick(View view){
@@ -152,6 +188,7 @@ public class Puzzle extends AppCompatActivity {
                 buttons[i/4][i%4].setClickable(false);
             }
             timer.cancel();
+            Mezclar.setClickable(false);
         }
     }
 }

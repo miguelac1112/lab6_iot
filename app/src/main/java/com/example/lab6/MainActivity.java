@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         btnMemory.setOnClickListener(view ->  {
 
-            /*Intent intent = new Intent(MainActivity.this, Puzzle.class);
-            startActivity(intent);*/
+            Intent intent = new Intent(MainActivity.this, Memory.class);
+            startActivity(intent);
 
         });
     }

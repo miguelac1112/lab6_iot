@@ -185,8 +185,8 @@
             android:text="Cargar Imagen"/>
 
         <Button
-            android:text="Jugar"
-            android:id="@+id/Jugar"
+            android:text="Mezclar"
+            android:id="@+id/Mezclar"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
