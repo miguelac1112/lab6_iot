@@ -17,10 +17,10 @@ import java.util.List;
 
 public class Memory extends AppCompatActivity {
 
-    int personajes[] = {R.drawable.memocharlie,
-            R.drawable.memomarcia,R.drawable.memorerun,
-            R.drawable.memosally,R.drawable.memoschroeder,
-            R.drawable.memosnoopy};
+    int personajes[] = {R.drawable.abra,
+            R.drawable.aerodactyl,R.drawable.alakazam,
+            R.drawable.arbok,R.drawable.arcanine,
+            R.drawable.articuno};
 
     Integer iperson[] = {0,0,1,1,2,2,3,3,4,4,5,5};
 
@@ -186,12 +186,12 @@ public class Memory extends AppCompatActivity {
 
         bmp=null;
         switch (i) {
-            case 0: bmp= BitmapFactory.decodeResource(getResources(), R.drawable.memocharlie);break;
-            case 1: bmp=BitmapFactory.decodeResource(getResources(), R.drawable.memomarcia);break;
-            case 2: bmp=BitmapFactory.decodeResource(getResources(), R.drawable.memorerun);break;
-            case 3: bmp=BitmapFactory.decodeResource(getResources(), R.drawable.memosally);break;
-            case 4: bmp=BitmapFactory.decodeResource(getResources(), R.drawable.memoschroeder);break;
-            case 5: bmp=BitmapFactory.decodeResource(getResources(), R.drawable.memosnoopy);break;
+            case 0: bmp= BitmapFactory.decodeResource(getResources(), R.drawable.abra);break;
+            case 1: bmp=BitmapFactory.decodeResource(getResources(), R.drawable.aerodactyl);break;
+            case 2: bmp=BitmapFactory.decodeResource(getResources(), R.drawable.alakazam);break;
+            case 3: bmp=BitmapFactory.decodeResource(getResources(), R.drawable.arbok);break;
+            case 4: bmp=BitmapFactory.decodeResource(getResources(), R.drawable.arcanine);break;
+            case 5: bmp=BitmapFactory.decodeResource(getResources(), R.drawable.articuno);break;
         }
 
         if (control==-1) {//si es que han marcado por primera vez
