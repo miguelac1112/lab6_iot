@@ -21,14 +21,11 @@ import java.io.IOException;
 
 public class Puzzle extends AppCompatActivity {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-
+    static final int IMAGECAPTURE = 1;
     public static boolean GANASTE;
     private static final int REQUEST_OPEN_GALLERY = 1;
     private Bitmap imageBitmap = null;
     private PuzzleBoardView boardView;
-    private static TextView bestScore;
-
     private ImageButton solveButton;
     private static TextView score;
     private static SharedPreferences sharedpreferences;
@@ -73,7 +70,6 @@ public class Puzzle extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_puzzle, menu);
         return true;
     }
