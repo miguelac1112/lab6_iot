@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnPuzzle;
     private Button btnMemory;
+    public static int LEVEL=4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

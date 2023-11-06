@@ -1,198 +1,142 @@
 package com.example.lab6;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.io.IOException;
 
 public class Puzzle extends AppCompatActivity {
 
-    private int emptyX=3;
-    private int emptyY=3;
-    private RelativeLayout group;
-    private Button[][] buttons;
-    private int[] tiles;
-    private TextView textViewSteps;
-    private int stepCount=0;
-    private TextView textViewTime;
-    private Timer timer;
-    private int timeCount=0;
-    private Button CargarImagen;
-    private Button Mezclar;
-    private boolean isTimeRunning;
-    private static final int SELECT_PICTURE = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    public static boolean GANASTE;
+    private static final int REQUEST_OPEN_GALLERY = 1;
+    private Bitmap imageBitmap = null;
+    private PuzzleBoardView boardView;
+    private static TextView bestScore;
+
+    private ImageButton solveButton;
+    private static TextView score;
+    private static SharedPreferences sharedpreferences;
+    private Bitmap bitmap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle);
 
-        loadViews();
-        loadNumbers();
-        generateNumbers();
-        loadDataToViews();
+        score = (TextView) findViewById(R.id.score2);
+        GANASTE=false;
+        RelativeLayout container = (RelativeLayout) findViewById(R.id.puzzle_container);
+        boardView = new PuzzleBoardView(this);
+        boardView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+        container.addView(boardView);
 
-        CargarImagen = findViewById(R.id.CargarImagen);
 
-        CargarImagen.setOnClickListener(view -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+        sharedpreferences = getSharedPreferences("BestScore", Context.MODE_PRIVATE);
 
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-                startActivityForResult(intent, 1);
+
+        container.post(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.crash);
+                boardView.initialize(bitmap);
+                if (GANASTE) {
+                    Intent intent = new Intent(Puzzle.this, MainActivity.class);
+                    GANASTE = false;
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
+
+    }
+
+    public void modifyAttributeFromMyClass(boolean newValue) {
+        this.GANASTE = newValue;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_puzzle, menu);
+        return true;
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void dispatchTakePictureIntent(View view) {
+        Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
+        openGalleryIntent.setType("image/*");
+        startActivityForResult(openGalleryIntent, REQUEST_OPEN_GALLERY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null){
 
-            Uri selectedImageUri = data.getData();
-        }
-    }
-
-    private void loadDataToViews(){
-        emptyX=3;
-        emptyY=3;
-        for(int i=0;i<group.getChildCount()-1;i++){
-            buttons[i/4][i%4].setText(String.valueOf(tiles[i]));
-            buttons[i/4][i%4].setBackgroundResource(android.R.drawable.btn_default);
-        }
-
-        buttons[emptyX][emptyY].setText("");
-        buttons[emptyX][emptyY].setBackgroundColor(ContextCompat.getColor(this,R.color.colorFreeButton));
-    }
-
-    private void generateNumbers(){
-        int n=15;
-        Random random= new Random();
-        while (n>1){
-            int randomNum = random.nextInt(n--);
-            int temp = tiles[randomNum];
-            tiles[randomNum]=tiles[n];
-            tiles[n] = temp;
-        }
-
-        if(!isSolvable()){
-            generateNumbers();
-        }
-    }
-
-    private boolean isSolvable(){
-        int countInversions=0;
-        for(int i=0;i<15;i++){
-            for(int j=0;j<i;j++){
-                if(tiles[j]>tiles[i]){
-                    countInversions++;
-                }
-            }
-        }
-        return countInversions%2==0;
-    }
-
-    private void loadNumbers(){
-        tiles = new int[16];
-        for(int i=0; i<group.getChildCount() - 1 ; i++ ){
-            tiles[i] = i + 1 ;
-        }
-    }
-
-    private void loadTimer(){
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                timeCount++;
-                setTime(timeCount);
-            }
-        },1000,1000);
-    }
-
-    private void setTime(int timeCount){
-        int second = timeCount%60;
-        int hour = timeCount%3600;
-        int minute = (timeCount-hour*3600);
-
-        textViewTime.setText(String.format("Time: %02d:%02d:%02d",hour,minute,second));
-    }
-    private void loadViews(){
-        group=findViewById(R.id.group);
-        textViewSteps=findViewById(R.id.text_view_steps);
-        textViewTime=findViewById(R.id.text_view_time);
-        Mezclar = findViewById(R.id.Mezclar);
-
-        loadTimer();
-        buttons = new Button[4][4];
-
-        for (int i=0;i<group.getChildCount();i++){
-            buttons[i/4][i%4] = (Button) group.getChildAt(i);
-        }
-
-        Mezclar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generateNumbers();
-                loadDataToViews();
-            }
-        });
-    }
-
-    public void buttonClick(View view){
-        Button button = (Button) view;
-        int x = button.getTag().toString().charAt(0)-'0';
-        int y = button.getTag().toString().charAt(1)-'0';
-
-        if((Math.abs(emptyX-x)==1&&emptyY==y)||(Math.abs(emptyY-y)==1&&emptyX==x)){
-            buttons[emptyX][emptyY].setText(button.getText().toString());
-            buttons[emptyX][emptyY].setBackgroundResource(android.R.drawable.btn_default);
-            button.setText("");
-            button.setBackgroundColor(ContextCompat.getColor(this,R.color.colorFreeButton));
-            emptyX=x;
-            emptyY=y;
-            stepCount++;
-            textViewSteps.setText("Steps: "+stepCount);
-
-            checkWin();
-        }
-    }
-
-    private void checkWin(){
-        boolean isWin = false;
-        if(emptyX==3&&emptyY==3){
-            for(int i=0;i<group.getChildCount()-1;i++){
-                if(buttons[i/4][i%4].getText().toString().equals(String.valueOf(i+1))){
-                    isWin=true;
-                }else{
-                    isWin=false;
-                    break;
+        if (requestCode == REQUEST_OPEN_GALLERY && resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri selectedImageUri = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                    boardView.initialize(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
 
-        if(isWin){
-            Toast.makeText(this,"Win!!\nSteps: "+stepCount,Toast.LENGTH_SHORT).show();
-            for(int i=0;i<group.getChildCount();i++){
-                buttons[i/4][i%4].setClickable(false);
-            }
-            timer.cancel();
-            Mezclar.setClickable(false);
-        }
+
     }
+
+    public void shuffleImage(View view) {
+        boardView.shuffle();
+    }
+
+    public void solve(View view) {
+
+        solveButton.setClickable(false);
+        boardView.solve();
+        solveButton.setClickable(true);
+
+    }
+
+    public void home(View view){
+        Intent in = new Intent(this,MainActivity.class);
+        startActivity(in);
+        finish();
+    }
+
+    public static void setScore(int Score){
+        score.setText(""+Score);
+        return ;
+    }
+
 }

@@ -141,6 +141,8 @@
         android:layout_width="216dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Agregar Imagenes"/>
+        android:text="Agregar Imagenes"
+        android:backgroundTint="#010207"
+        android:fontFamily="@font/forbiden"/>
 
 </LinearLayout>
